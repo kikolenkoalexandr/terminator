@@ -33,7 +33,9 @@ class BotHandler:
 
         return last_update
 
-f_token = open('token.txt', 'r')
+#from os import getcwd ; print(getcwd())
+prj_path = 'projects/terminator/'
+f_token = open(prj_path + 'token.txt', 'r')
 token = f_token.read()
 f_token.close()
 greet_bot = BotHandler(token.split('\n')[0])
@@ -65,7 +67,7 @@ def main():
                         if '-' in string:
                             fields = string.split('-', maxsplit=1)
                             if fields[0].isnumeric() and len(fields) == 2 and len(fields[1]) > 0:
-                                f_requests = open('requests.txt', 'a+')
+                                f_requests = open(prj_path + 'requests.txt', 'a+')
                                 for field in fields:
                                     f_requests.write(field.strip() + ';')
                                 f_requests.write('\n')
@@ -76,27 +78,27 @@ def main():
 
                 # Управляющее слово /покажи
                 elif last_chat_text[0:7].lower() == '/покажи':
-                    f_requests = open('requests.txt', 'r')
+                    f_requests = open(prj_path + 'requests.txt', 'r')
                     strings = f_requests.read()
                     f_requests.close()
                     greet_bot.send_message(last_chat_id, strings)
 
                 # Управляющее слово /<номер скважины>
                 elif last_chat_text[0] == '/' and last_chat_text.split('\n')[0][1:].strip().isnumeric() and len(last_chat_text.split('\n')) == 2:
-                    f_requests = open('requests.txt', 'r')
+                    f_requests = open(prj_path + 'requests.txt', 'r')
                     strings = f_requests.read().split('\n')
                     f_requests.close()
                     skv = last_chat_text.split('\n')[0][1:].strip()
                     for string in strings:
                         if string.split(';')[0] == skv:
                             strings.remove(string)
-                            f_archive = open('archive.txt', 'a+')
+                            f_archive = open(prj_path + 'archive.txt', 'a+')
                             f_archive.write(skv + ';' + datetime.datetime.now().strftime('%M:%S:%H %d/%m/%Y') + ';' + last_chat_text.split('\n')[1] + ';\n')
                             f_archive.close()
                             greet_bot.send_message(last_chat_id, 'Заявка по скважине {} выполнена.'.format(skv))
                             break
-                    f_requests = open('requests.txt', 'w')
-                    f_requests.write('\n'.join(strings) + '\n')
+                    f_requests = open(prj_path + 'requests.txt', 'w')
+                    f_requests.write('\n'.join(strings))
                     f_requests.close()
 
                 # Управляющее слово /покажи статистику

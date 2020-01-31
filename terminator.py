@@ -2,6 +2,7 @@
 
 import requests  
 import datetime
+import os
 
 class BotHandler:
 
@@ -33,8 +34,7 @@ class BotHandler:
 
         return last_update
 
-#from os import getcwd ; print(getcwd())
-prj_path = 'projects/terminator/'
+prj_path = os.path.abspath(__file__)[:-13]
 f_token = open(prj_path + 'token.txt', 'r')
 token = f_token.read()
 f_token.close()
